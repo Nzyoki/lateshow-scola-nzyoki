@@ -1,52 +1,92 @@
-#Late Show API
-This projects Implements a FLASK API for managing data about late sow episodes, guests and their appearances.
-The lateshow API provides endpoints to:
--View all episodes from the Late Show
--View specific episodes with their guest appearances
+Late Show API
+-This project implements a Flask API for managing data about Late Show episodes, guests, and their appearances.
+
+Features
+The Late Show API provides endpoints to:
+
+-View all episodes of the Late Show
+
+-View a specific episode with guest appearances
+
 -View all guests who have appeared on the show
--Create new appearance records for guests on episodes
 
-#Installation
-1. Clone the repository:git clone git@github.com:Nzyoki/lateshow-scola-nzyoki.git 
-2.cd to lateshow-scola-nzyoki
-3.Create a Virtual env on the terminal and activaate it:
--python3 -m venv venv
--source venv/bin/activate
-4.Install the dependancies
--pip install flask flask-sqlalchemy flask-migrate sqlalchemy-serializer
-5. Seed the database with episode and guest data
--python seed.py
-6.Start the server on port 5555(which I used to test on Postman)
-7. The Server will start running on http://localhost:5555/
+-Create new appearance records linking guests and episodes
 
-#Database Structure
-The database has 3 models:
-##Episode
--id: Primary key
--date: Date of the episode
--number: Episode number
-##Guest
--id: Primary key
--name: Guest's name
--occupation: Guest's occupation
-##Appearance
--An Episode has many Guests through Appearance
--A Guest has many Episodes through Appearance
--An Appearance belongs to both a Guest and an Episode
+Installation & Setup
+Clone the repository
+git clone git@github.com:Nzyoki/lateshow-scola-nzyoki.git
 
-#API endpoints
-##Get episodes
--Returns a list of all episodes
-##GET/episodes/
--Returns details for a specific episode with all its associated guest appearances.
-N/B:If the episode doesn't exist, returns:
-##GET /guests
--Returns a list of all guests.
-##POST /appearances
--Creates a new appearance record.
-N/B:Error response (if validation fails):"errors": ["Rating must be between 1 and 5"]
+Navigate into the project directory
+cd lateshow-scola-nzyoki
 
-#To test on Postman, make sure that python app.py is running so as to run the endpoints on postman.
-image.png
-image.png
-image.png
+Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+Install the dependencies
+pip install flask flask-sqlalchemy flask-migrate sqlalchemy-serializer
+
+Seed the database
+python seed.py
+
+Run the server
+python app.py
+The server will start at: http://localhost:5555
+
+Database Structure
+1.Episode
+id: Primary key
+date: Date of the episode
+number: Episode number
+
+2.Guest
+id: Primary key
+name: Guest's name
+occupation: Guest's occupation
+
+3.Appearance
+An Episode has many Guests through Appearance
+A Guest has many Episodes through Appearance
+An Appearance belongs to both a Guest and an Episode
+
+API Endpoints
+1.Get All Episodes
+GET /episodes
+Returns a list of all episodes
+
+2.Get Specific Episode
+GET /episodes/int:id
+Returns details for a specific episode, including all associated guest appearances
+
+3.If the episode does not exist, returns:
+{ "error": "Episode not found" }
+
+4.Get All Guests
+GET /guests
+Returns a list of all guests
+
+5.Create Appearance
+POST /appearances
+Creates a new appearance record
+
+Expected request body:
+
+{
+  "rating": 5,
+  "guest_id": 1,
+  "episode_id": 2
+}
+6.Error response if validation fails:
+
+{
+  "errors": ["Rating must be between 1 and 5"]
+}
+
+Testing with Postman
+To test the endpoints using Postman:
+
+Ensure the server is running:
+python app.py
+Use the base URL: http://localhost:5555
+
+Make requests to the endpoints described above.
